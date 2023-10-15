@@ -1,3 +1,5 @@
+/* General styles */
+
 html, body {
   height: 100%;
   margin: 0;
@@ -5,26 +7,64 @@ html, body {
 }
 
 body {
-/*  align-items: center;*/
   font-family: sans-serif;
   color: white;
   display: flex;
 }
 
+/* Styles for sidebar*/
+
 aside {
-  width: 30%;
-  background: #1d203a
+  width: 25%;
+  background: #1d203a;
+  overflow: auto;
 }
 
+aside > ol {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+ol > li.chat-element {
+  height: 7%;
+  width: 90%;
+  margin: 5%;
+  padding: 0;
+  list-style-type: none;
+}
+
+a.chat-element-link > div.chat-element-text {
+  display: flex;
+  flex-direction: column;
+}
+
+
+li.chat-element div.chat-element-text {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+li.chat-element div.chat-element-text:hover {
+  cursor: pointer;
+  background-color: rgba(150,150,150,0.5)
+}
+
+
+/* Styles for chat field*/
+
 main {
-  width: 70%;
+  width: 75%;
   background: #161e28;
   padding: 15px 0px 5px 15px;
 }
 
-/*h1 {
-  text-align: center;
-}*/
 
 div.chat-area {
   height:90%;
