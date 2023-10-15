@@ -1,0 +1,218 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+/*  align-items: center;*/
+  font-family: sans-serif;
+  color: white;
+  display: flex;
+}
+
+aside {
+  width: 30%;
+  background: #1d203a
+}
+
+main {
+  width: 70%;
+  background: #161e28;
+  padding: 15px 0px 5px 15px;
+}
+
+/*h1 {
+  text-align: center;
+}*/
+
+div.chat-area {
+  height:90%;
+  overflow: auto;
+}
+
+
+.message-group-received {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.message-group-received > div:first-child {
+  margin-top: auto;
+  margin-right: 5px;
+}
+
+
+.message-group-received > div:last-child {
+  flex-grow: 1;
+}
+
+.message-group-received > div:first-child > img {
+  border-radius: 50%;
+/*  margin-left: 15px;*/
+  height: 60px;
+  width: 60px;
+}
+
+.message-received {
+  max-width: 75%;
+  margin: 4px 0;
+  display: flex;
+}
+
+.message-received-text {
+  padding: 20px;
+  min-height: 20px;
+  background: #484c5c;
+/*  background: #822854;*/
+  border-radius: 6px 35px 35px 6px;
+}
+
+.message-received:first-child > .message-received-text {
+  border-top-left-radius: 35px;
+}
+
+.message-received:last-child > .message-received-text {
+  border-bottom-left-radius: 35px;
+}
+
+.message-group-sent {
+  width: 100%;
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.message-sent {
+  max-width: 75%;
+  margin: 4px 15px 4px auto;
+  display: flex;
+}
+
+.message-sent-text {
+  padding: 20px;
+  min-height: 20px;
+  background: #822854;
+  border-radius: 35px 6px 6px 35px;
+  margin-left: auto;
+}
+
+.message-sent:first-child > .message-sent-text {
+  border-top-right-radius: 35px;
+}
+
+.message-sent:last-child > .message-sent-text {
+  border-bottom-right-radius: 35px;
+}
+
+div.prompt-area {
+  height:10%;
+  display:flex;
+  justify-content: center;
+}
+
+div.prompt-area > textarea {
+  background-color: #dddddd;
+  color: #666666;
+  padding: 7px 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  line-height: 1.2;
+  width:50%;
+  margin: 20px 0;
+  font-size: 16px;
+  resize: none;
+}
+
+div.prompt-area > textarea:hover {
+  cursor: text;
+  background-color: #eeeeee;
+}
+
+div.prompt-area > textarea:focus {
+  cursor: text;
+  background-color: white;
+}
+
+
+div.prompt-area > button {
+  /*appearance: none;
+  backface-visibility: hidden;*/
+  background-color: #2f80ed;
+  border: none;
+  margin: 20px 0 20px 5px;
+  border-radius: 10px;
+  width:9%;
+  cursor: pointer;
+  color:#fff;
+  font-size: 16px;
+  /*border-style: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #fff;
+  display: inline-block;
+  font-family: Inter,-apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  height: 50px;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 14px 30px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;*/
+}
+
+
+
+div.prompt-area > button:hover {
+  background-color: #1366d6;
+  box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
+}
+
+div.prompt-area > button:hover:after {
+  opacity: .5;
+}
+
+div.prompt-area > button:active {
+  box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
+  transform: translateY(2px);
+  transition-duration: .35s;
+}
+
+div.prompt-area > button:active:after {
+  opacity: 1;
+}
+
+/*@media (min-width: 768px) {
+  .button-65 {
+    padding: 14px 22px;
+    width: 176px;
+  }
+}
+*/
+
+
+
+
+
+
+
+
+
+
+
+
