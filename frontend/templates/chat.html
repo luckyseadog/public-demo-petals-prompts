@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat with AI</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width initial-scale=1.0">
+		<link rel="stylesheet" href="styles.css">
+	    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<aside>
+			<ol class="history-chat-elements">
+				<li class="chat-element">
+					<a id="CHAT1" class="chat-element-link">
+						<div class="chat-element-text">CHAT1</div>
+					</a>
+				</li>
+				<li class="chat-element">
+					<a id="CHAT2" class="chat-element-link">
+						<div class="chat-element-text">CHAT2</div>
+					</a>
+				</li>
+				<li class="chat-element">
+					<a id="CHAT3" class="chat-element-link">
+						<div class="chat-element-text">CHAT3</div>
+					</a>
+				</li>
+				<li class="chat-element">
+					<a id="CHAT4" class="chat-element-link">
+						<div class="chat-element-text">CHAT4</div>
+					</a>
+				</li>
+				<li class="chat-element">
+					<a id="CHAT5" class="chat-element-link">
+						<div class="chat-element-text">CHAT5</div>
+					</a>
+				</li>
+				<li class="chat-element">
+					<a id="CHAT6" class="chat-element-link">
+						<div class="chat-element-text">CHAT6</div>
+					</a>
+				</li>
+				<li class="chat-element">
+					<a id="CHAT7" class="chat-element-link">
+						<div class="chat-element-text">CHAT7</div>
+					</a>
+				</li>
+				<li class="chat-element">
+					<a id="CHAT8" class="chat-element-link">
+						<div class="chat-element-text">CHAT8</div>
+					</a>
+				</li>
+				<li class="chat-element">
+					<a id="CHAT9" class="chat-element-link">
+						<div class="chat-element-text">CHAT9</div>
+					</a>
+				</li>
+				<li class="chat-element">
+					<a id="CHAT10" class="chat-element-link">
+						<div class="chat-element-text">CHAT10</div>
+					</a>
+				</li>
+				<li class="chat-element">
+					<a id="CHAT11" class="chat-element-link">
+						<div class="chat-element-text">CHAT11</div>
+					</a>
+				</li>
+			</ol>
+		</aside>
+		<main>
+			<div class="chat-area">
+			</div>
+			<div class="prompt-area">
+				<textarea placeholder="Type a message..."></textarea>
+				<button>Send
+					<!-- <span class="" data-state="closed">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" class="icon-sm m-1 md:m-0">
+							<path d="M.5 1.163A1 1 0 0 1 1.97.28l12.868 6.837a1 1 0 0 1 0 1.766L1.969 15.72A1 1 0 0 1 .5 14.836V10.33a1 1 0 0 1 .816-.983L8.5 8 1.316 6.653A1 1 0 0 1 .5 5.67V1.163Z" fill="currentColor">
+								
+							</path>
+						</svg>
+					</span> -->
+				</button>
+			</div>
+		</main>
+	</body>
+		   <script>
+
+const sendMessageButton = document.getElementById("sendMessageButton");
+const chatArea = document.getElementById('chat-area');
+
+sendMessageButton.addEventListener("click", function() {
+	const messageInput = document.getElementById("messageInput");
+
+    const messageText = messageInput.value;
+
+
+ 	const url = 'http://localhost:8072/chat/add_message';
+    const data = {"content": messageText }; // Wrap the messageText in an object
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(responseData => {
+        console.log('Сервер ответил:', responseData);
+    })
+    .catch(error => {
+        console.error('Произошла ошибка:', error);
+    });
+	// chatArea.appendChild(createMessageGroupSent(data));
+	// chatArea.appendChild(createMessageGroupReceived(data));
+
+	messageInput.value = '';
+
+
+});
+
+function createMessageGroupReceived(message) {
+    const messageGroupReceived = document.createElement('div');
+    messageGroupReceived.classList.add('message-group-received');
+
+    const avatarDiv = document.createElement('div');
+    const avatarImg = document.createElement('img');
+    avatarImg.src = "https://api.dicebear.com/7.x/pixel-art-neutral/svg?seed=Rascal&backgroundColor=b68655";
+    avatarImg.alt = "avatar";
+    avatarDiv.appendChild(avatarImg);
+
+    const messageReceived = document.createElement('div');
+    messageReceived.classList.add('message-received');
+
+    const messageReceivedText = document.createElement('div');
+    messageReceivedText.classList.add('message-received-text');
+    messageReceivedText.textContent = message['content'];
+
+    messageReceived.appendChild(messageReceivedText);
+    messageGroupReceived.appendChild(avatarDiv);
+    messageGroupReceived.appendChild(messageReceived);
+
+    return messageGroupReceived;
+}
+
+function createMessageGroupSent(message) {
+    const messageGroupReceived = document.createElement('div');
+    messageGroupReceived.classList.add('message-group-sent');
+
+    const avatarDiv = document.createElement('div');
+    const avatarImg = document.createElement('img');
+    avatarDiv.appendChild(avatarImg);
+
+    const messageReceived = document.createElement('div');
+    messageReceived.classList.add('message-sent');
+
+    const messageReceivedText = document.createElement('div');
+    messageReceivedText.classList.add('message-sent-text');
+    messageReceivedText.textContent = message['content'];
+
+    messageReceived.appendChild(messageReceivedText);
+	messageGroupReceived.appendChild(messageReceived);
+    messageGroupReceived.appendChild(avatarDiv);
+
+    return messageGroupReceived;
+}
+
+
+function draw_messages() {
+    fetch("http://localhost:8072/chat")
+        .then(res => res.json())
+        .then(messages => {
+            const chatArea = document.getElementById('chat-area');
+            chatArea.innerHTML = ''; // Clear the chat area
+            for (const message of messages) {
+				if (message['user'] == 'Nikita'){
+				 chatArea.appendChild(createMessageGroupSent(message));
+
+				} else {
+				 chatArea.appendChild(createMessageGroupReceived(message));
+
+
+				}
+            }
+        });
+}
+
+draw_messages()
+setInterval(draw_messages, 5000)
+
+    </script>
+</html>
