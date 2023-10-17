@@ -43,8 +43,10 @@ function createMessageGroupReceived(message) {
     avatarImg.alt = "avatar";
     avatarDiv.appendChild(avatarImg);
 
+    const messageDiv =  document.createElement('div');
     const messageReceived = document.createElement('div');
     messageReceived.classList.add('message-received');
+    messageDiv.appendChild(messageReceived);
 
     const messageReceivedText = document.createElement('div');
     messageReceivedText.classList.add('message-received-text');
@@ -52,7 +54,7 @@ function createMessageGroupReceived(message) {
 
     messageReceived.appendChild(messageReceivedText);
     messageGroupReceived.appendChild(avatarDiv);
-    messageGroupReceived.appendChild(messageReceived);
+    messageGroupReceived.appendChild(messageDiv);
 
     return messageGroupReceived;
 }
@@ -60,10 +62,6 @@ function createMessageGroupReceived(message) {
 function createMessageGroupSent(message) {
     const messageGroupReceived = document.createElement('div');
     messageGroupReceived.classList.add('message-group-sent');
-
-    const avatarDiv = document.createElement('div');
-    const avatarImg = document.createElement('img');
-    avatarDiv.appendChild(avatarImg);
 
     const messageReceived = document.createElement('div');
     messageReceived.classList.add('message-sent');
@@ -74,7 +72,6 @@ function createMessageGroupSent(message) {
 
     messageReceived.appendChild(messageReceivedText);
 	messageGroupReceived.appendChild(messageReceived);
-    messageGroupReceived.appendChild(avatarDiv);
 
     return messageGroupReceived;
 }
