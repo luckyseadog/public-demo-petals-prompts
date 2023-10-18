@@ -84,7 +84,8 @@ function draw_messages() {
             const chatArea = document.getElementById('chat-area');
             chatArea.innerHTML = ''; // Clear the chat area
             for (const message of messages) {
-				if (message['user'] == 'Human'){
+                console.log(message);
+				if (message.AI == false){
 				 chatArea.appendChild(createMessageGroupSent(message));
 
 				} else {
@@ -97,4 +98,4 @@ function draw_messages() {
 }
 
 draw_messages()
-setInterval(draw_messages, 5000)
+setInterval(draw_messages, 2000)

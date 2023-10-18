@@ -9,15 +9,15 @@ from database.database import SQLDatabase
 model = NeuralNetworkModel("petals-team/StableBeluga2")
 
 db = SQLDatabase("messages.db")
+db.create_table()
 
 router = APIRouter()
 
 @router.get("/chat")
 def get_messages():
-    db.execute("SELECT * FROM messages ORDER BY date DESC LIMIT 7")
-    messages = db.fetchall()
+    messages = db.select_all(limit=7)
     messages = [
-        {"id": m[0], "user": m[1], "date": m[2], "content": m[3]} for m in messages
+        {"messege_id": m[0], "chat_id": m[1], "date": m[2], "AI":m[3], "content": m[4]} for m in messages
     ]
     messages.reverse()
     return messages
@@ -25,14 +25,7 @@ def get_messages():
 
 @router.post("/chat/add_message")
 def add_message(data: Dict[str, str]):
-    ai_tokens = model.inference(data["content"])
+    db.add_record(values=(False, data["content"]))
+    ai_tokens = model.inference(data["content"], plug=True)
     ai_message = "".join(ai_tokens)
-    db.execute(
-        'INSERT INTO messages (user, date, content) VALUES (?, datetime("now", "localtime"), ?)',
-        ("AI", ai_message),
-    )
-    db.execute(
-        'INSERT INTO messages (user, date, content) VALUES (?, datetime("now", "localtime"), ?)',
-        ("Human", data["content"]),
-    )
-    db.commit()
+    db.add_record(values=(True, ai_message))
