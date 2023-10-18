@@ -1,4 +1,5 @@
 import time
+import torch
 
 from transformers import AutoTokenizer
 from petals import AutoDistributedModelForCausalLM
@@ -8,8 +9,11 @@ class NeuralNetworkModel:
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name, use_fast=False, add_bos_token=False
         )
-        self.model = AutoDistributedModelForCausalLM.from_pretrained(model_name)
         self.fake_token = self.tokenizer("^")["input_ids"][0]
+        if torch.cuda.is_available():
+            self.model = AutoDistributedModelForCausalLM.from_pretrained(model_name).cuda()
+        else:
+            self.model = AutoDistributedModelForCausalLM.from_pretrained(model_name)
     
     def inference(self, data_content, plug=False):
         if not plug:
@@ -17,7 +21,10 @@ class NeuralNetworkModel:
                 prompt = data_content
                 print(prompt)
                 prefix = f"Human: {prompt}\nFriendly AI:"
-                prefix = self.tokenizer(prefix, return_tensors="pt")["input_ids"]
+                if torch.cuda.is_available():
+                    prefix = self.tokenizer(prefix, return_tensors="pt")["input_ids"].cuda()
+                else:
+                    prefix = self.tokenizer(prefix, return_tensors="pt")["input_ids"]
                 ai_tokens = []
                 while True:
                     outputs = self.model.generate(

@@ -26,6 +26,6 @@ def get_messages():
 @router.post("/chat/add_message")
 def add_message(data: Dict[str, str]):
     db.add_record(values=(False, data["content"]))
-    ai_tokens = model.inference(data["content"], plug=True)
+    ai_tokens = model.inference(data["content"], plug=False)
     ai_message = "".join(ai_tokens)
     db.add_record(values=(True, ai_message))
