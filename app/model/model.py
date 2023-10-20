@@ -4,6 +4,7 @@ import torch
 from transformers import AutoTokenizer
 from petals import AutoDistributedModelForCausalLM
 
+
 class NeuralNetworkModel:
     def __init__(self, model_name="petals-team/StableBeluga2"):
         self.tokenizer = AutoTokenizer.from_pretrained(
@@ -11,10 +12,12 @@ class NeuralNetworkModel:
         )
         self.fake_token = self.tokenizer("^")["input_ids"][0]
         if torch.cuda.is_available():
-            self.model = AutoDistributedModelForCausalLM.from_pretrained(model_name).cuda()
+            self.model = AutoDistributedModelForCausalLM.from_pretrained(
+                model_name
+            ).cuda()
         else:
             self.model = AutoDistributedModelForCausalLM.from_pretrained(model_name)
-    
+
     def inference(self, data_content, plug=False):
         if not plug:
             with self.model.inference_session(max_length=512) as sess:
@@ -22,7 +25,9 @@ class NeuralNetworkModel:
                 print(prompt)
                 prefix = f"Human: {prompt}\nFriendly AI:"
                 if torch.cuda.is_available():
-                    prefix = self.tokenizer(prefix, return_tensors="pt")["input_ids"].cuda()
+                    prefix = self.tokenizer(prefix, return_tensors="pt")[
+                        "input_ids"
+                    ].cuda()
                 else:
                     prefix = self.tokenizer(prefix, return_tensors="pt")["input_ids"]
                 ai_tokens = []
@@ -35,14 +40,14 @@ class NeuralNetworkModel:
                         temperature=0.9,
                         top_p=0.6,
                     )
-                    outputs = self.tokenizer.decode([self.fake_token, outputs[0, -1].item()])[1:]
+                    outputs = self.tokenizer.decode(
+                        [self.fake_token, outputs[0, -1].item()]
+                    )[1:]
                     ai_tokens.append(outputs)
 
                     if "\n" in outputs or "</s>" in outputs:
                         break
-                    prefix = (
-                        None  # Prefix is passed only for the 1st token of the bot's response
-                    )
+                    prefix = None  # Prefix is passed only for the 1st token of the bot's response
             return ai_tokens
         else:
             print("Model in a PLUG mode!!!!")

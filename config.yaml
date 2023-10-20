@@ -1,0 +1,9 @@
+storage:
+  table_name: chat
+  file_path: database.db
+  columns_typing:
+    message_id: integer
+    chat_id: integer
+    date: datetime
+    is_ai: bool
+    content: text

@@ -8,7 +8,7 @@ sendMessageButton.addEventListener("click", function() {
     const messageText = messageInput.value;
 
 
- 	const url = 'http://localhost:8078/chat/add_message';
+ 	const url = 'http://localhost:8094/chat/add_message';
     const data = {"content": messageText }; // Wrap the messageText in an object
 
     fetch(url, {
@@ -78,16 +78,15 @@ function createMessageGroupSent(message) {
 
 
 function draw_messages() {
-    fetch("http://localhost:8078/chat")
+    fetch("http://localhost:8094/chat")
         .then(res => res.json())
         .then(messages => {
             const chatArea = document.getElementById('chat-area');
             chatArea.innerHTML = ''; // Clear the chat area
             for (const message of messages) {
                 console.log(message);
-				if (message.AI == false){
+				if (message.is_ai == false){
 				 chatArea.appendChild(createMessageGroupSent(message));
-
 				} else {
 				 chatArea.appendChild(createMessageGroupReceived(message));
 
