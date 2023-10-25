@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append(r"/".join(sys.path[0].split(r"/")[:-1]))
+
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 

@@ -1,5 +1,5 @@
 storage:
-  table_name: chat
+  table_name: messages
   file_path: database.db
   columns_typing:
     chat_id: integer

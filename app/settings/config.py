@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict
 import yaml
+import os
 
 
 @dataclass
@@ -14,8 +15,10 @@ class SqLiteStorage:
 class Config:
     storage: SqLiteStorage
     @classmethod
-    def load(cls, path: str) -> "Config":
-        with open(path, "r") as file:
+    def load(cls) -> "Config":
+        script_dir = os.path.dirname(os.path.dirname(__file__))
+        config_file_path = os.path.join(script_dir, "config.yaml")
+        with open(config_file_path, "r") as file:
             yaml_data = yaml.safe_load(file)
 
         storage = SqLiteStorage(

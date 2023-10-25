@@ -1,15 +1,19 @@
-
 const sendMessageButton = document.getElementById("sendMessageButton");
 const chatArea = document.getElementById('chat-area');
+var chatIdParam = "0";
 
 sendMessageButton.addEventListener("click", function() {
-	const messageInput = document.getElementById("messageInput");
+    // const searchParams = new URLSearchParams(window.location.search);
+    // const chatIdParam = searchParams.get('chat_id');
+    const chatIdParamInt = parseInt(chatIdParam, 10);
 
+
+	const messageInput = document.getElementById("messageInput");
     const messageText = messageInput.value;
 
 
  	const url = 'http://localhost:8094/chat/add_message';
-    const data = {"content": messageText }; // Wrap the messageText in an object
+    const data = {"chat_id": chatIdParamInt, "content": messageText};
 
     fetch(url, {
         method: 'POST',
@@ -77,18 +81,17 @@ function createMessageGroupSent(message) {
 }
 
 
-function draw_messages() {
-    fetch("http://localhost:8094/chat")
+function draw_messages(chatIdParam) {
+    fetch("http://localhost:8094/chat" + "?chat_id=" + chatIdParam)
         .then(res => res.json())
         .then(messages => {
             const chatArea = document.getElementById('chat-area');
             chatArea.innerHTML = ''; // Clear the chat area
             for (const message of messages) {
-                console.log(message);
 				if (message.is_ai == false){
-				 chatArea.appendChild(createMessageGroupSent(message.content));
+				 chatArea.appendChild(createMessageGroupSent(message));
 				} else {
-				 chatArea.appendChild(createMessageGroupReceived(message.content));
+				 chatArea.appendChild(createMessageGroupReceived(message));
 
 
 				}
@@ -96,5 +99,40 @@ function draw_messages() {
         });
 }
 
-draw_messages()
-setInterval(draw_messages, 2000)
+draw_messages(chatIdParam)
+
+
+setInterval(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const newChatIdParam = searchParams.get('chat_id');
+    if (newChatIdParam !== chatIdParam) {
+        chatIdParam = newChatIdParam;
+    }
+}, 200);
+
+setInterval(() => {
+    draw_messages(chatIdParam);
+}, 2000);
+
+
+// window.addEventListener('pushstate', function(event) {
+//     const searchParams = new URLSearchParams(window.location.search);
+//     const newChatIdParam = searchParams.get('chat_id') || "1"; // Use "1" as default if chat_id is not found
+//     if (newChatIdParam !== chatIdParam) {
+//         // If chat_id has changed, update chatIdParam and call draw_messages
+//         chatIdParam = newChatIdParam;
+//         draw_messages(chatIdParam);
+//     }
+// });
+
+
+// window.onpopstate = function (event) {
+//     // Get the current chat_id from the URL and update the chatIdParam
+//     const searchParams = new URLSearchParams(window.location.search);
+//     const newChatIdParam = searchParams.get('chat_id') || "1"; // Use "1" as default if chat_id is not found
+//     if (newChatIdParam !== chatIdParam) {
+//         // If chat_id has changed, update chatIdParam and call draw_messages
+//         chatIdParam = newChatIdParam;
+//         draw_messages(chatIdParam);
+//     }
+// };

@@ -26,15 +26,27 @@ class SqliteConnector(StorageConnector[config.SqLiteStorage]):
         )
         self._con.commit()
 
-    def select_all(self, name="chat", *, limit=7):
+    def select_all(self, *, limit=7):
         self._client.execute(
             f"""SELECT * 
-                FROM {name}
+                FROM {self._storage.table_name}
                 ORDER BY date DESC 
                 LIMIT {limit}"""
         )
 
         return self._client.fetchall()
+
+    def select_by_chat(self, *, chat_id, limit=7):
+        self._client.execute(
+            f"""SELECT *
+                FROM {self._storage.table_name}
+                WHERE chat_id = {chat_id}
+                ORDER BY date DESC 
+                LIMIT {limit}"""
+        )
+
+        return self._client.fetchall()
+
 
     # def insert_many(self, data) -> None:
     #     for data_sample in data:
@@ -47,10 +59,10 @@ class SqliteConnector(StorageConnector[config.SqLiteStorage]):
     #         )
     #         self._client.execute(insert_command, values)
 
-    def insert(self, values) -> None:
+    def insert(self, chat_id, is_ai, content) -> None:
         self._client.execute(
-            """INSERT INTO chat(chat_id, date, is_ai, content) 
-                                VALUES (1, datetime("now", "localtime"), ?, ?)""",
-            values,
+            """INSERT INTO messages(chat_id, date, is_ai, content) 
+                                VALUES (?, datetime("now", "localtime"), ?, ?)""",
+            (chat_id, is_ai, content)
         )
         self._con.commit()
