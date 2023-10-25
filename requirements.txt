@@ -2,4 +2,3 @@ uvicorn
 fastapi
 git+https://github.com/bigscience-workshop/petals
 tomli
-dacite

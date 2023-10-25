@@ -86,9 +86,9 @@ function draw_messages() {
             for (const message of messages) {
                 console.log(message);
 				if (message.is_ai == false){
-				 chatArea.appendChild(createMessageGroupSent(message));
+				 chatArea.appendChild(createMessageGroupSent(message.content));
 				} else {
-				 chatArea.appendChild(createMessageGroupReceived(message));
+				 chatArea.appendChild(createMessageGroupReceived(message.content));
 
 
 				}

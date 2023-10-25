@@ -1,8 +1,5 @@
-from dataclasses import dataclass, field
-from typing import cast, Dict, List
-from dacite.core import from_dict
-from dacite.data import Data
-
+from dataclasses import dataclass
+from typing import Dict
 import yaml
 
 
@@ -20,4 +17,11 @@ class Config:
     def load(cls, path: str) -> "Config":
         with open(path, "r") as file:
             yaml_data = yaml.safe_load(file)
-        return from_dict(Config, cast(Data, yaml_data))
+
+        storage = SqLiteStorage(
+            table_name=yaml_data['storage']['table_name'],
+            file_path=yaml_data['storage']['file_path'],
+            columns_typing=yaml_data['storage']['columns_typing']
+        )
+
+        return Config(storage=storage)

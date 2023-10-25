@@ -11,7 +11,6 @@ from app.storage.sqlite import SqliteConnector
 model = NeuralNetworkModel("petals-team/StableBeluga2")
 config = Config.load("config.yaml")
 db = SqliteConnector(config.storage)
-db.init_client()
 
 router = APIRouter()
 
@@ -20,7 +19,7 @@ router = APIRouter()
 def get_messages():
     messages = db.select_all(limit=20)
     messages = [
-        {"message_id": m[0], "chat_id": m[1], "date": m[2], "is_ai": m[4], "content": m[-1]}
+        {"message_id": m[0], "chat_id": m[1], "date": m[2], "is_ai": m[3], "content": m[4]}
         for m in messages
     ]
     messages.reverse()
