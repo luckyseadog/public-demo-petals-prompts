@@ -1,6 +1,16 @@
 const sendMessageButton = document.getElementById("sendMessageButton");
-const chatArea = document.getElementById('chat-area');
+const chatArea = document.getElementById("chat-area");
+var chatFields = document.getElementsByClassName("chat-element-link");
 var chatIdParam = "0";
+
+Array.from(chatFields).forEach(function(chatField) {
+    chatField.addEventListener("click", function() {
+        const chatId= chatField.getAttribute("chat_id")
+        var queryParams = new URLSearchParams(window.location.search);
+        queryParams.set("chat_id", chatId);
+        history.replaceState(null, null, "?"+queryParams.toString());
+    });
+});
 
 sendMessageButton.addEventListener("click", function() {
     // const searchParams = new URLSearchParams(window.location.search);
@@ -99,15 +109,21 @@ function draw_messages(chatIdParam) {
         });
 }
 
+function getChatIdParam() {
+    const searchParams = new URLSearchParams(window.location.search);
+    var newChatIdParam = searchParams.get('chat_id');
+    newChatIdParam = newChatIdParam ? newChatIdParam : "0"
+    if (newChatIdParam !== chatIdParam) {
+        chatIdParam = newChatIdParam;
+    }
+}
+
+getChatIdParam()
 draw_messages(chatIdParam)
 
 
 setInterval(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const newChatIdParam = searchParams.get('chat_id');
-    if (newChatIdParam !== chatIdParam) {
-        chatIdParam = newChatIdParam;
-    }
+    getChatIdParam()
 }, 200);
 
 setInterval(() => {

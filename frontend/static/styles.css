@@ -53,8 +53,14 @@ li.chat-element div.chat-element-text {
 
 li.chat-element div.chat-element-text:hover {
   cursor: pointer;
-  background-color: rgba(150,150,150,0.5)
+  background-color: rgba(150, 150, 150, 0.5)
 }
+
+li.chat-element div.chat-element-text:active {
+  cursor: pointer;
+  background-color: rgba(150, 150, 150, 0.25)
+}
+
 
 
 /* Styles for chat field*/
