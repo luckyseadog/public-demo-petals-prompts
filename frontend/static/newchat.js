@@ -43,12 +43,12 @@ function receiveReplica(inputs) {
     let message = null;
     ws.onmessage = event => {
         if (!createMessage) {
-            console.log(event) // how event looks like??????
-            message = createMessageGroupReceived({"content": event.data});
-            chatArea.appendChild(message)
+            console.log(event); // how event looks like??????
+            message = createMessageGroupReceived(event.data);
+            chatArea.appendChild(message);
             createMessage = true;
         } else
-            message.querySelector('.message-received-text').textContent = message.querySelector('.message-received-text').textContent + event.data
+            message.querySelector('.message-received-text').textContent = message.querySelector('.message-received-text').textContent + event.data;
     };
 }
     
@@ -56,9 +56,9 @@ function receiveReplica(inputs) {
 sendMessageButton.addEventListener("click", function() {
 	const messageInput = document.getElementById("messageInput");
     const messageText = messageInput.value;
-    sendReplica()
-    chatArea.appendChild(createMessageGroupSent({"content": messageText}));
     console.log(messageText);
+    chatArea.appendChild(createMessageGroupSent(messageText));
+    sendReplica();
 	messageInput.value = '';
 });
 
