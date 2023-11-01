@@ -3,6 +3,7 @@ from typing import Dict
 import websockets
 
 from fastapi import APIRouter, Query, WebSocket
+from pydantic import BaseModel
 
 from app.model.model import NeuralNetworkModel
 
@@ -16,8 +17,12 @@ db = SqliteConnector(config.storage)
 
 router = APIRouter()
 
+class Message(BaseModel):
+    chat_id: int
+    content: str
 
-@router.get("/chat")
+
+@router.get("/chat/api")
 def get_messages(chat_id=Query(0)):
     messages = db.select_by_chat(chat_id=chat_id, limit=7)
     messages = [
@@ -35,16 +40,18 @@ async def send_and_return(message_deq, result, websocket):
         message_deq.task_done()
      
 
-@router.websocket("/chat/add-massage-websocket")
-async def receiver(data: Dict[str, str], websocket: WebSocket):
-    db.insert(chat_id=data["chat_id"], is_ai=False, content=data["content"])
+@router.websocket("/chat/api/add-massage-websocket")
+async def receiver(websocket: WebSocket):
     await websocket.accept()
     while True:
-        data = await websocket.receive_text()
+        data_raw = await websocket.receive_text()
+        data = Message.parse_raw(data_raw)
+        db.insert(chat_id=data.chat_id, is_ai=False, content=data.content)
+
         message_deq = asyncio.Queue()
         result_deq = asyncio.Queue()
         
-        producer = asyncio.create_task(model.inference_websocket(data["content"], message_deq, plug=False))
+        producer = asyncio.create_task(model.inference_websocket(data.content, message_deq, plug=False))
         consumer = asyncio.create_task(send_and_return(message_deq, result_deq, websocket))
 
         await asyncio.gather(producer)
@@ -55,10 +62,10 @@ async def receiver(data: Dict[str, str], websocket: WebSocket):
         while not result_deq.empty():
             ai_message = await result_deq.get()
 
-        db.insert(chat_id=data["chat_id"], is_ai=True, content=ai_message)
+        db.insert(chat_id=data.chat_id, is_ai=True, content=ai_message)
 
 
-@router.post("/chat/add_message")
+@router.post("/chat/api/add_message")
 def add_message(data: Dict[str, str]):
     db.insert(chat_id=data["chat_id"], is_ai=False, content=data["content"])
     ai_tokens = model.inference(data["content"], plug=False)

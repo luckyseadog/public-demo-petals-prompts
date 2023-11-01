@@ -22,7 +22,7 @@ sendMessageButton.addEventListener("click", function() {
     const messageText = messageInput.value;
 
 
- 	const url = 'http://localhost:8094/chat/add_message';
+ 	const url = 'http://localhost:8094/chat/api/add_message';
     const data = {"chat_id": chatIdParamInt, "content": messageText};
 
     fetch(url, {
@@ -92,7 +92,7 @@ function createMessageGroupSent(message) {
 
 
 function draw_messages(chatIdParam) {
-    fetch("http://localhost:8094/chat" + "?chat_id=" + chatIdParam)
+    fetch("http://localhost:8094/chat/api" + "?chat_id=" + chatIdParam)
         .then(res => res.json())
         .then(messages => {
             const chatArea = document.getElementById('chat-area');
