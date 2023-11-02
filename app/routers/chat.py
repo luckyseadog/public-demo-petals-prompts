@@ -1,25 +1,27 @@
 import asyncio
-from typing import Dict
-import websockets
-
-from fastapi import APIRouter, Query, WebSocket
+from fastapi import APIRouter, Query, WebSocket, Request
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+from typing import Dict
 
-from app.model.model import NeuralNetworkModel
-
-# from database.database import SQLDatabase
+from app.model.model import NLPModule
 from app.settings.config import Config
 from app.storage.sqlite import SqliteConnector
 
-model = NeuralNetworkModel("petals-team/StableBeluga2")
 config = Config.load()
+model = NLPModule("petals-team/StableBeluga2", plug=config.nlp_module.plug, device=config.nlp_module.device)
 db = SqliteConnector(config.storage)
 
+templates = Jinja2Templates(directory="frontend")
 router = APIRouter()
 
 class Message(BaseModel):
     chat_id: int
     content: str
+
+@router.get("/chat")
+def get_messages(request: Request):
+    return templates.TemplateResponse("templates/chat.html", {"request": request})
 
 
 @router.get("/chat/api")
@@ -51,7 +53,7 @@ async def receiver(websocket: WebSocket):
         message_deq = asyncio.Queue()
         result_deq = asyncio.Queue()
         
-        producer = asyncio.create_task(model.inference_websocket(data.content, message_deq, plug=False))
+        producer = asyncio.create_task(model.inference_websocket(data.content, message_deq))
         consumer = asyncio.create_task(send_and_return(message_deq, result_deq, websocket))
 
         await asyncio.gather(producer)
@@ -68,6 +70,6 @@ async def receiver(websocket: WebSocket):
 @router.post("/chat/api/add_message")
 def add_message(data: Dict[str, str]):
     db.insert(chat_id=data["chat_id"], is_ai=False, content=data["content"])
-    ai_tokens = model.inference(data["content"], plug=False)
+    ai_tokens = model.inference(data["content"])
     ai_message = "".join(ai_tokens)
     db.insert(chat_id=data["chat_id"], is_ai=True, content=ai_message)
