@@ -4,12 +4,20 @@ sys.path.append(r"/".join(sys.path[0].split(r"/")[:-1]))
 
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
 from app.routers import router
 
 # ----------------------- #
 
 app = FastAPI()
+
+app.mount(
+    "/frontend",
+    StaticFiles(directory=Path(__file__).parent.parent.absolute() / "frontend"),
+    name="frontend",
+)
 
 app.add_middleware(
     CORSMiddleware,

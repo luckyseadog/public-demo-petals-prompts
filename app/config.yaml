@@ -6,3 +6,6 @@ storage:
     date: datetime
     is_ai: bool
     content: text
+nlp_module:
+  plug: False
+  device: cpu

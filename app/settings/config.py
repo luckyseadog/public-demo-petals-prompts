@@ -10,10 +10,17 @@ class SqLiteStorage:
     file_path: str
     columns_typing: Dict[str, str]
 
+@dataclass
+class NLPModule:
+    plug: bool
+    device: str
+
 
 @dataclass
 class Config:
     storage: SqLiteStorage
+    nlp_module: NLPModule
+
     @classmethod
     def load(cls) -> "Config":
         script_dir = os.path.dirname(os.path.dirname(__file__))
@@ -27,4 +34,7 @@ class Config:
             columns_typing=yaml_data['storage']['columns_typing']
         )
 
-        return Config(storage=storage)
+        nlp_module = NLPModule(plug=yaml_data["nlp_module"]["plug"],
+                               device=yaml_data['nlp_module']['device'])
+
+        return Config(storage=storage, nlp_module=nlp_module)
