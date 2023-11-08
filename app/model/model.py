@@ -33,7 +33,6 @@ class NLPModule:
         if not self.plug:
             with self.model.inference_session(max_length=512) as sess:
                 prompt = data_content
-                # print(prompt)
                 prefix = f"Human: {prompt}\nFriendly AI:"
                 if torch.cuda.is_available():
                     prefix = self.tokenizer(prefix, return_tensors="pt")[

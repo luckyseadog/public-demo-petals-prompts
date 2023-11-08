@@ -1,11 +1,14 @@
+import { createMessageGroupReceived, createMessageGroupSent} from "./drawMessages.mjs";
+
+
 const sendMessageButton = document.getElementById("sendMessageButton");
 const chatArea = document.getElementById("chat-area");
 var chatFields = document.getElementsByClassName("chat-element-link");
 var chatIdParam = "0";
-// var ws = null;
-ws = new WebSocket("ws://localhost:8094/chat/api/add-massage-websocket");
+var ws = null;
 
-Array.from(chatFields).forEach(function(chatField) {
+Array.from(chatFields).forEach(function (chatField) {
+    
     chatField.addEventListener("click", function() {
         const chatId= chatField.getAttribute("chat_id")
         var queryParams = new URLSearchParams(window.location.search);
@@ -16,7 +19,7 @@ Array.from(chatFields).forEach(function(chatField) {
 
 
 function openSession() {
-    ws = new WebSocket("ws://localhost:8094/chat/api/add-massage-websocket");
+    ws = new WebSocket("ws://localhost:8125/chat/api/add-message-websocket");
     console.log("NEW CONNECT");
     ws.onopen = () => {
         sendReplica();
@@ -63,7 +66,8 @@ sendMessageButton.addEventListener("click", function() {
 });
 
 function draw_messages(chatIdParam) {
-    fetch("http://localhost:8094/chat/api" + "?chat_id=" + chatIdParam)
+    console.log(chatIdParam)
+    fetch("http://localhost:8125/chat/api" + "?chat_id=" + chatIdParam)
         .then(res => res.json())
         .then(messages => {
             const chatArea = document.getElementById('chat-area');
@@ -99,48 +103,7 @@ setInterval(() => {
 }, 200);
 
 
-function createMessageGroupReceived(message) {
-    const messageGroupReceived = document.createElement('div');
-    messageGroupReceived.classList.add('message-group-received');
 
-    const avatarDiv = document.createElement('div');
-    const avatarImg = document.createElement('img');
-    avatarImg.src = "https://api.dicebear.com/7.x/pixel-art-neutral/svg?seed=Rascal&backgroundColor=b68655";
-    avatarImg.alt = "avatar";
-    avatarDiv.appendChild(avatarImg);
-
-    const messageDiv =  document.createElement('div');
-    const messageReceived = document.createElement('div');
-    messageReceived.classList.add('message-received');
-    messageDiv.appendChild(messageReceived);
-
-    const messageReceivedText = document.createElement('div');
-    messageReceivedText.classList.add('message-received-text');
-    messageReceivedText.textContent = message;
-
-    messageReceived.appendChild(messageReceivedText);
-    messageGroupReceived.appendChild(avatarDiv);
-    messageGroupReceived.appendChild(messageDiv);
-
-    return messageGroupReceived;
-}
-
-function createMessageGroupSent(message) {
-    const messageGroupSent = document.createElement('div');
-    messageGroupSent.classList.add('message-group-sent');
-
-    const messageSent = document.createElement('div');
-    messageSent.classList.add('message-sent');
-
-    const messageSentText = document.createElement('div');
-    messageSentText.classList.add('message-sent-text');
-    messageSentText.textContent = message;
-
-    messageSent.appendChild(messageSentText);
-	messageGroupSent.appendChild(messageSent);
-
-    return messageGroupSent;
-}
 
 
 

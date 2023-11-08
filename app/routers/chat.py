@@ -42,7 +42,7 @@ async def send_and_return(message_deq, result, websocket):
         message_deq.task_done()
      
 
-@router.websocket("/chat/api/add-massage-websocket")
+@router.websocket("/chat/api/add-message-websocket")
 async def receiver(websocket: WebSocket):
     await websocket.accept()
     while True:

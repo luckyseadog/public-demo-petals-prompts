@@ -1,7 +1,4 @@
 import sys
-
-sys.path.append(r"/".join(sys.path[0].split(r"/")[:-1]))
-
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -21,7 +18,7 @@ app.mount(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://0.0.0.0:8125"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
