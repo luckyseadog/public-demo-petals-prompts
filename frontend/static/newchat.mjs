@@ -5,7 +5,7 @@ const sendMessageButton = document.getElementById("sendMessageButton");
 const chatArea = document.getElementById("chat-area");
 var chatFields = document.getElementsByClassName("chat-element-link");
 var chatIdParam = "0";
-var ws = null;
+let ws = new WebSocket("ws://localhost:8125/chat/api/add-message-websocket");
 
 Array.from(chatFields).forEach(function (chatField) {
     
@@ -18,20 +18,20 @@ Array.from(chatFields).forEach(function (chatField) {
 });
 
 
-function openSession() {
-    ws = new WebSocket("ws://localhost:8125/chat/api/add-message-websocket");
-    console.log("NEW CONNECT");
-    ws.onopen = () => {
-        sendReplica();
-    }
-}
+// function openSession() {
+//     ws = new WebSocket("ws://localhost:8125/chat/api/add-message-websocket");
+//     console.log("NEW CONNECT");
+//     ws.onopen = () => {
+//         sendReplica();
+//     }
+// }
 
 function sendReplica() {
-    if (ws === null) {
-        openSession();
-        return;
+    // if (ws === null) {
+    //     openSession();
+    //     return;
         
-    }
+    // }
     const chatIdParamInt = parseInt(chatIdParam, 10);
 
     const messageInput = document.getElementById("messageInput");
