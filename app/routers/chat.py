@@ -60,11 +60,11 @@ async def receiver(websocket: WebSocket):
         await message_deq.join()
         consumer.cancel()
 
-        ai_message = None
+        ai_message = []
         while not result_deq.empty():
-            ai_message = await result_deq.get()
+            ai_message.append(await result_deq.get())
 
-        db.insert(chat_id=data.chat_id, is_ai=True, content=ai_message)
+        db.insert(chat_id=data.chat_id, is_ai=True, content=''.join(ai_message))
 
 
 @router.post("/chat/api/add_message")
