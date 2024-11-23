@@ -1,7 +1,17 @@
-# petals_promts
+# Petals Prompts Service
 
-Как запускать backend сервер?
-`uvicorn app.main:app --host 0.0.0.0 --port 8075` (запускаем из папки app)
+***Please, note that this repository is a replica of Petals Prompts private project in GitHub.***
 
-Как запускать forntend сервер?
-`python -m http.server --bind localhost 8933 -d .` (запускам из папки frontend)
+## How to run Backend Server
+
+```
+cd app
+uvicorn app.main:app --host 0.0.0.0 --port 8075
+```
+
+## How to run Frontend Server
+
+```
+cd frontend
+python -m http.server --bind localhost 8933 -d .
+```
