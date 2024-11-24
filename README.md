@@ -2,6 +2,15 @@
 
 ***Please, note that this repository is a replica of Petals Prompts private project in GitHub.***
 
+Tech Stack:
+- Python
+- FastAPI
+- PyTorch
+- Transformers
+- JavaScript
+- HTML/CSS
+- AsyncIO
+
 ## How to run Backend Server
 
 ```
