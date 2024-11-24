@@ -24,3 +24,6 @@ uvicorn app.main:app --host 0.0.0.0 --port 8075
 cd frontend
 python -m http.server --bind localhost 8933 -d .
 ```
+
+## Acknowledgment
+This project was developed with mentorship and guidance from members of the [Petals](https://link-url-here.org) team. Their support and expertise were invaluable and greatly appreciated in shaping this work.
